@@ -1,17 +1,7 @@
 A live-input spectrogram written using [Polymer][polymer] using the [Web
 Audio API][wapi].
 
-![Screenshot](screenshot.png)
-
-[See it in action][demo]. Once running, see if you can make a pattern
-with your speech or by whistling. You can also click anywhere on the
-page to turn on the oscillator. For a bit more fun, [load this][aphex]
-in a parallel tab.
-
-[aphex]: https://www.youtube.com/watch?v=M9xMuPWAZW8&t=5m30s
-[polymer]: http://polymer-project.org
-[wapi]: http://webaudioapi.com
-[demo]: http://borismus.github.io/spectrogram
+https://jmperezperez.com/bpm-detection-javascript/
 
 <!--more-->
 
@@ -26,7 +16,6 @@ of your pointer. It also shows you the frequency that it plays back, and
 plots a short buffer of pointer positions. This is handy for measuring
 internal latency:
 
-![Latency estimation](latency.png)
 
 Having the oscillator built-in is also pretty fun. You can [send morse
 code][morse] (short short short, long long, short short long, short
@@ -92,4 +81,3 @@ github][github]. Some ideas for things that can be done:
 - Higher precision FFT results (would require writing a custom FFT
   rather than using the one built into Web Audio API.)
 
-[github]: https://github.com/borismus/spectrogram
