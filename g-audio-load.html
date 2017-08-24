@@ -1,0 +1,59 @@
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+
+<polymer-element name="g-audio-load" attributes="load">
+  <template>
+    <style>
+      :host {
+        display: block;
+          padding: 1em;
+        background: rgba(255, 255, 255, 0.5);
+        margin: 1em;
+        border: rgba(0, 0, 0, 0.3);
+        border-width: 1px;
+        border-style: solid;
+        font-family: 'Inconsolata', sans-serif;
+        z-index: 10;
+      }
+    </style>
+    <button type="button" id="btn" on-tap="{{loadAudio}}" link="drums">Drums</button>
+    <button type="button" id="btn" on-tap="{{loadAudio}}" link="common">Common</button>
+  </template>
+  <script>
+    Polymer('g-audio-load', {
+        load: false,
+        ready: function() {
+            //console.log("hellll");
+        },
+        getAudioURLByFlag: function(flag){
+            if(flag==='drums'){
+                url ='https://chinmay.audio/decodethis/public/audio/drmapan.wav';
+            }else{
+                url='https://chinmay.audio/decodethis/public/audio/M1F1-float32WE-AFsp.wav';
+            }
+            return url;
+        },
+        loadAudio: function(e) {
+            var ajaxReq = new XMLHttpRequest();
+            audioUrl = this.getAudioURLByFlag(e.target.getAttribute('link'));
+            ajaxReq.open('GET', audioUrl, true);
+            ajaxReq.responseType = 'arraybuffer';
+            ajaxReq.onload = function(){
+                var undecodedAudioData = ajaxReq.response;
+                context.decodeAudioData(undecodedAudioData, function(buffer){
+                    soundSource = context.createBufferSource();
+                    soundSource.buffer = buffer;
+                    soundSource.connect(context.destination);  // AudioNode
+                    soundSource.loop = true;
+                    soundSource.start(context.currentTime);
+                    soundSource.stop(context.currentTime+3);
+                }, function(e){
+                    console.error('decodeAudioData error', e);
+                });
+            };
+            ajaxReq.send();
+        },
+    });
+  </script>
+    
+</polymer-element>
