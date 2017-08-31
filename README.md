@@ -5,33 +5,14 @@ https://jmperezperez.com/bpm-detection-javascript/
 
 <!--more-->
 
-# Why?
+# How to start?
 
-Having a spectrogram is incredibly handy for a lot of the work I've done
-recently. So a while ago, I built one that satisfies my needs. It runs
-in a full-screen, using the microphone input as the source.
-
-It also includes an oscillator, which plays a sine wave at the frequency
-of your pointer. It also shows you the frequency that it plays back, and
-plots a short buffer of pointer positions. This is handy for measuring
-internal latency:
+1. Run `npm install`
+2. `gulp browser-sync`
+This should fire up your default browser.
+It reloads for a while and then asks for a mic permission.
 
 
-Having the oscillator built-in is also pretty fun. You can [send morse
-code][morse] (short short short, long long, short short long, short
-short short), [scan for radio stations][radio], make 8-bit character
-[dying sound effects][sfx], simulate [aliens, ghosts and
-theremins][ghosts], and annoy [small, annoying dogs][dogs].
-
-I use the tool mostly in Chrome, but it also works in Firefox.
-Unfortunately no other browser currently has both `getUserMedia` and Web
-Audio API support.
-
-[morse]: sounds/morse.wav
-[radio]: sounds/radio.wav
-[sfx]: sounds/sfx.wav
-[ghosts]: sounds/ghosts.wav
-[dogs]: sounds/dogs.wav
 
 # Configuration parameters
 
@@ -65,19 +46,3 @@ Pass parameters to the component:
 
     <g-spectrogram log labels ticks="10">
     </g-spectrogram>
-
-
-# Future work / features
-
-It would be great to add a few things to this tool. If you're interested
-in contributing, submit your changes as a pull request [on
-github][github]. Some ideas for things that can be done:
-
-- Improved axis labeling.
-- Make it work in mobile browsers.
-- Loading/saving of traces.
-- Loading audio data from a file.
-- Zoom support.
-- Higher precision FFT results (would require writing a custom FFT
-  rather than using the one built into Web Audio API.)
-
