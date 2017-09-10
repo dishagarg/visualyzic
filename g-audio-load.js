@@ -2,33 +2,35 @@
 Polymer('g-audio-load', {
         load: false,
         ready: function() {
-            //console.log("hellll");
-        },
-        
-        attached: function() {
-            var spotifyApi = new SpotifyWebApi();
-            spotifyApi.getToken().then(function(response) {
-              spotifyApi.setAccessToken(response.token);
-              console.log(spotifyApi);
+            console.log("hellll");
+            var vm = this;
+            vm.spotifyApi = new SpotifyWebApi();
+            vm.spotifyApi.getToken().then(function(response) {
+              vm.spotifyApi.setAccessToken(response.token);
+              console.log(vm.spotifyApi);
             });
 
-            var queryInput = this.$.query,
-                result = this.$.result,
-                text = this.$.text,
-                audioTag = this.$.audio,
-                playButton = this.$.play;
+            vm.queryInput = this.$.query;
+            vm.result = this.$.result;
+            vm.text = this.$.text;
+            vm.audioTag = this.$.audio;
+            vm.playButton = this.$.play;
 
 
-            playButton.addEventListener('click', function() {
-              if (audioTag.paused) {
-                audioTag.play();
+            vm.playButton.addEventListener('click', function() {
+              if (vm.audioTag.paused) {
+                vm.audioTag.play();
               } else {
-                audioTag.pause();
+                vm.audioTag.pause();
               }
             });
 
-            result.style.display = 'none';
+            vm.result.style.display = 'none';
 
+        },
+        
+        attached: function() {
+            console.log("hellll");
         },
     
         getAudioURLByFlag: function(flag){
@@ -155,15 +157,16 @@ Polymer('g-audio-load', {
         },
 
         onSubmit: function(formEvent) {
+          var vm = this;
           formEvent.preventDefault();
-          result.style.display = 'none';
-          spotifyApi.searchTracks(
-            queryInput.value.trim(), {limit: 1})
+          vm.result.style.display = 'none';
+          vm.spotifyApi.searchTracks(
+            vm.queryInput.value.trim(), {limit: 1})
             .then(function(results) {
               console.log(results);
               var track = results.tracks.items[0];
               var previewUrl = track.preview_url;
-              audioTag.src = track.preview_url;
+              vm.audioTag.src = track.preview_url;
 
               var request = new XMLHttpRequest();
               request.open('GET', previewUrl, true);
@@ -217,10 +220,11 @@ Polymer('g-audio-load', {
 
                 offlineContext.oncomplete = function(e) {
                   var buffer = e.renderedBuffer;
-                  var peaks = this.getPeaks([buffer.getChannelData(0), buffer.getChannelData(1)]);
-                  var groups = this.getIntervals(peaks);
+                  console.log(this);
+                  var peaks = vm.getPeaks([buffer.getChannelData(0), buffer.getChannelData(1)]);
+                  var groups = vm.getIntervals(peaks);
 
-                  var svg = this.$.svg;
+                  var svg = vm.$.svg;
                   svg.innerHTML = '';
                   var svgNS = 'http://www.w3.org/2000/svg';
                   var rect;
@@ -246,26 +250,26 @@ Polymer('g-audio-load', {
                     return intB.count - intA.count;
                   }).splice(0, 5);
 
-                  text.innerHTML = '<div id="guess">Guess for track <strong>' + track.name + '</strong> by ' +
+                  vm.text.innerHTML = '<div id="guess">Guess for track <strong>' + track.name + '</strong> by ' +
                     '<strong>' + track.artists[0].name + '</strong> is <strong>' + Math.round(top[0].tempo) + ' BPM</strong>' +
                     ' with ' + top[0].count + ' samples.</div>';
 
-                  text.innerHTML += '<div class="small">Other options are ' +
+                  vm.text.innerHTML += '<div class="small">Other options are ' +
                     top.slice(1).map(function(group) {
                       return group.tempo + ' BPM (' + group.count + ')';
                     }).join(', ') +
                     '</div>';
 
                   var printENBPM = function(tempo) {
-                    text.innerHTML += '<div class="small">The tempo according to Spotify is ' +
+                    vm.text.innerHTML += '<div class="small">The tempo according to Spotify is ' +
                           tempo + ' BPM</div>';
                   };
-                  spotifyApi.getAudioFeaturesForTrack(track.id)
+                  vm.spotifyApi.getAudioFeaturesForTrack(track.id)
                     .then(function(audioFeatures) {
                       printENBPM(audioFeatures.tempo);
                     });
 
-                  result.style.display = 'block';
+                  vm.result.style.display = 'block';
                 };
               };
               request.send();
