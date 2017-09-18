@@ -8,7 +8,8 @@ https://jmperezperez.com/bpm-detection-javascript/
 # How to start?
 
 1. Run `npm install`
-2. `gulp browser-sync`
+2. `npm install -g gulp`
+3. `gulp browser-sync`
 This should fire up your default browser.
 It reloads for a while and then asks for a mic permission.
 
