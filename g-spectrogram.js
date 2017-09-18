@@ -3,7 +3,7 @@
 Polymer('g-spectrogram', {
   // Show the controls UI.
   controls: false,
-  zoom: 1,
+  t_domain: true,
   // Log mode.
   log: false,
   // Show axis labels, and how many ticks.
@@ -49,9 +49,14 @@ Polymer('g-spectrogram', {
       this.$.labels.height = this.height;
       didResize = true;
     }
+      console.log(this.t_domain);
 
-    //this.renderTimeDomain();
-    this.renderFreqDomain();
+    if(this.t_domain===true){
+        this.renderTimeDomain();
+    }
+      else{
+        this.renderFreqDomain();
+    }
 
     if (this.labels && didResize) {
       //change the axeslabels if resize did happen and labels are true
@@ -89,9 +94,6 @@ Polymer('g-spectrogram', {
     this.analyser.getByteFrequencyData(freq);
 
     var ctx = this.ctx;
-    /*if(this.zoom){
-        this.ctx.scale(this.zoom, this.zoom);
-    }*/
     // Copy the current canvas onto the temp canvas.
     this.tempCanvas.width = this.width;
     this.tempCanvas.height = this.height;

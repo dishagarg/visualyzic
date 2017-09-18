@@ -1,7 +1,7 @@
 <link rel="import" href="./bower_components/polymer/polymer.html">
 
 
-<polymer-element name="g-spectrogram-controls" attributes="zoom log labels ticks speed color">
+<polymer-element name="g-spectrogram-controls" attributes="t_domain log labels ticks speed color">
   <template>
     <style>
       :host {
@@ -28,8 +28,9 @@
     </style>
     <h1>Spectrogram Controls</h1>
     <div class="config">
-      <label for="zoom">Zoom scale</label>
-      <input type="range" id="zoom" value="{{zoom}}" min="1" max="5" />
+      <label for="domain">Select Domain:</label><br/>
+      Time<input type="radio" id="domain" value="true" checked="{{t_domain}}" name="domain">
+      Frequency<input type="radio" id="domain" value="false" checked="{{!t_domain}}" name="domain">
     </div>
     <div class="config">
       <label for="log">Log scale</label>
