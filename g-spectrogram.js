@@ -3,6 +3,7 @@
 Polymer('g-spectrogram', {
   // Show the controls UI.
   controls: false,
+  zoom: 1,
   // Log mode.
   log: false,
   // Show axis labels, and how many ticks.
@@ -88,6 +89,9 @@ Polymer('g-spectrogram', {
     this.analyser.getByteFrequencyData(freq);
 
     var ctx = this.ctx;
+    /*if(this.zoom){
+        this.ctx.scale(this.zoom, this.zoom);
+    }*/
     // Copy the current canvas onto the temp canvas.
     this.tempCanvas.width = this.width;
     this.tempCanvas.height = this.height;
@@ -121,7 +125,6 @@ Polymer('g-spectrogram', {
     // Draw the copied image.
     ctx.drawImage(this.tempCanvas, 0, 0, this.width, this.height,
                   0, 0, this.width, this.height);
-
     // Reset the transformation matrix.
     ctx.setTransform(1, 0, 0, 1, 0, 0);
   },
@@ -233,12 +236,12 @@ Polymer('g-spectrogram', {
   },
 
   getFullColor: function(value) {
-    var fromH = 62;
+    var fromH = 280;
     var toH = 0;
     var percent = value / 255;
     var delta = percent * (toH - fromH);
     var hue = fromH + delta;
-    return 'hsl(H, 100%, 50%)'.replace(/H/g, hue);
+    return ('hsl(H, 120%, 50%)'.replace(/H/g, hue));
   },
   
   logChanged: function() {

@@ -4,7 +4,7 @@
 <link rel="import" href="./g-oscillator.html">
 <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 
-<polymer-element name="g-spectrogram" attributes="controls log fftsize labels ticks oscillator speed color">
+<polymer-element name="g-spectrogram" attributes="controls zoom log fftsize labels ticks oscillator speed color">
   <template>
   <style>
     canvas {
@@ -17,13 +17,14 @@
     }
     g-audio-load {
       position: absolute;
-      margin-top: 290px;
+      margin-top: 330px;
     }
   </style>
     <canvas id="canvas"></canvas>
     <canvas id="labels"></canvas>
     <template if="{{controls}}">
       <g-spectrogram-controls
+          zoom="{{zoom}}"
           log="{{log}}"
           labels="{{labels}}"
           speed="{{speed}}"
