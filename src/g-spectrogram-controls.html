@@ -1,0 +1,73 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link href="../bower_components/paper-radio-button/paper-radio-button.html" rel="import">
+<link href="../bower_components/paper-radio-group/paper-radio-group.html" rel="import">
+<link href="../bower_components/paper-slider/paper-slider.html" rel="import">
+<link href="../bower_components/paper-toggle-button/paper-toggle-button.html" rel="import">
+
+
+<dom-module id="g-spectrogram-controls">
+  <template>
+    <style>
+      :host {
+        display: block;
+          padding: 1em;
+        background: rgba(255, 255, 255, 0.5);
+        margin: 1em;
+        border: rgba(0, 0, 0, 0.3);
+        border-width: 1px;
+        border-style: solid;
+        font-family: 'Inconsolata', sans-serif;
+        z-index: 10;
+        width: 200px;
+        }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+        margin-bottom: 20px;
+      }
+      .config {
+        font-size: 14px;
+        margin-top: 0.5em;
+      }
+    </style>
+    <h1>Spectrogram Controls</h1>
+    <div class="config">
+      <label for="domain">Select Domain:</label><br/>
+        
+        <paper-radio-group selected="{{t_domain}}">
+          <!--<label for="time">time</label>-->
+          <paper-radio-button id="time" name="time">Time</paper-radio-button>
+          <!--<label for="freq">freq</label>-->
+          <paper-radio-button id="freq" name="freq">Frequency</paper-radio-button>
+        </paper-radio-group>
+        <br/>
+    </div>
+    <div class="config">
+        <label for="log">Log scale</label>
+        <paper-toggle-button id="log" checked="{{log}}"></paper-toggle-button>
+    </div>
+    <div class="config">
+        <label for="color">Full color</label>
+        <paper-toggle-button id="color" checked="{{color}}"></paper-toggle-button>
+    </div>
+    <div class="config">
+        <label for="speed">Speed</label>
+        <paper-slider id="speed" value="{{speed}}" min="1" max="5"></paper-slider>
+    </div>
+    <div class="config">
+        <label for="labels">Show labels</label>
+        <paper-toggle-button id="labels" checked="{{labels}}"></paper-toggle-button>
+    </div>
+    <template is="dom-if" if="{{labels}}">
+      <div class="config">
+        <label for="ticks">Number of ticks</label>
+        <paper-slider id="ticks" value="{{ticks}}" min="2" max="10"></paper-slider>
+      </div>
+    </template>
+    </template>
+  <script src="g-spectrogram-controls.js"></script>
+</dom-module>
