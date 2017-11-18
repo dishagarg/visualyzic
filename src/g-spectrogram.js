@@ -12,6 +12,24 @@ class GSpectrogram extends Polymer.Element {
           reflectToAttribute: true,
           value: false
       },
+      controlLabel:{
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: "Open Controls"
+      },
+      songPlay: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+      },
+      songPlayLabel:{
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: "Open Play Panel"
+      },
       // Log mode.
       log: {
           type: Boolean,
@@ -66,6 +84,24 @@ class GSpectrogram extends Polymer.Element {
                                 this.onStreamError.bind(this));
     }
     this.ctx = this.$.canvas.getContext('2d');
+  }
+  _controlEvent(){
+      if(this.controlLabel=='Open Controls'){
+        this.controls = true;
+        this.controlLabel = 'Close Controls'
+      } else{
+        this.controls = false;
+        this.controlLabel = 'Open Controls'
+      }
+  }
+  _songPlayEvent(){
+      if(this.songPlayLabel=='Open Play Panel'){
+        this.songPlay = true;
+        this.songPlayLabel = 'Close Play Panel'
+      } else{
+        this.songPlay = false;
+        this.songPlayLabel = 'Open Play Panel'
+      }
   }
 
   render() {

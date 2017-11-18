@@ -20,15 +20,35 @@
     }
     g-spectrogram-controls {
       position: absolute;
+      margin-top: 20px;
+      margin-left: 10px;
       /*background: #d9edf7;*/
     }
     g-audio-load {
       position: absolute;
-      margin-top: 430px;
+      margin-top: 20px;
+      margin-left: 270px;
+    }
+    .controlButton{
+      position: absolute;
+      padding-top: 10px;
+      margin-left: 10px;
+    }
+    .playButton{
+      position: relative;
+      padding-top: 10px;
+      margin-left: 270px;
     }
   </style>
     <canvas id="canvas"></canvas>
     <canvas id="labels"></canvas>
+    
+    <div class="controlButton">
+        <paper-button toggles raised class="green" on-click="_controlEvent">{{controlLabel}}</paper-button>
+    </div>
+    <div class="playButton">
+        <paper-button toggles raised class="green" on-click="_songPlayEvent">{{songPlayLabel}}</paper-button>
+    </div>
     <template is="dom-if" if="{{controls}}">
       <g-spectrogram-controls
           t_domain="{{t_domain}}"
@@ -38,6 +58,8 @@
           ticks="{{ticks}}"
           color="{{color}}">
       </g-spectrogram-controls>
+    </template>
+    <template is="dom-if" if="{{songPlay}}">
       <g-audio-load load="{{log}}"></g-audio-load>
     </template>
     <template is="dom-if" if="{{oscillator}}">
