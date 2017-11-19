@@ -21,8 +21,8 @@
       on-mouseout="onMouseOut"
       on-touchstart="onTouchStart"
       on-touchend="onTouchEnd"
-      on-touchmove="onTouchMove"></canvas>
-  <canvas id="zoom" width="200" height="200" style="position:absolute; top:0; left:0; display:none"></canvas>
+      on-touchmove="onTouchMove"></canvas><!--
+  <canvas id="zoom" width="200" height="200" style="position:absolute; top:0; left:0; display:none"></canvas>-->
   </template>
   <script>
 // Assumes context is an AudioContext defined outside of this class.
@@ -136,7 +136,7 @@ class GOscillator extends Polymer.Element {
     }
     var canvas = this.$.freq;
     var ctx = canvas.getContext('2d');
-    var zoom = this.$.zoom;
+    /*var zoom = this.$.zoom;
     var zoomCtx = zoom.getContext('2d');
     zoomCtx.fillStyle = "white";
     zoomCtx.fillRect(0,0, zoom.width, zoom.height);
@@ -144,7 +144,7 @@ class GOscillator extends Polymer.Element {
     console.log(zoom.style);
     zoom.style.top = event.pageY + 10 + "px";
     zoom.style.left = event.pageX + 10 + "px";
-    zoom.style.display = "block";
+    zoom.style.display = "block";*/
   }
 
   onMouseOut(event) {

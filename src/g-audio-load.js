@@ -1,47 +1,42 @@
 
 class GAudioLoad extends Polymer.Element {
-  static get is() { return 'g-audio-load'; }
+    static get is() { return 'g-audio-load'; }
+    static get properties() {
+        return {
+            load: {
+              type: Boolean,
+              notify: true,
+              reflectToAttribute: true,
+              value: false
+          }
+        };
+    }
+    ready() {
+        super.ready();
+        var vm = this;
+        vm.spotifyApi = new SpotifyWebApi();
+        vm.spotifyApi.getToken().then(function(response) {
+          vm.spotifyApi.setAccessToken(response.token);
+          console.log(vm.spotifyApi);
+        });
 
-  static get properties() {
-    return {
-        load: {
-          type: Boolean,
-          notify: true,
-          reflectToAttribute: true,
-          value: false
-      }
-    };
-  }
- ready() {
-    super.ready();
-    console.log("hellll");
-    var vm = this;
-    vm.spotifyApi = new SpotifyWebApi();
-    vm.spotifyApi.getToken().then(function(response) {
-      vm.spotifyApi.setAccessToken(response.token);
-      console.log(vm.spotifyApi);
-    });
-
-    vm.queryInput = vm.$.query;
-    vm.result = vm.$.result;
-    vm.text = vm.$.text;
-    vm.audioTag = vm.$.audio;
-    vm.playButton = vm.$.play;
+        vm.queryInput = vm.$.query;
+        vm.result = vm.$.result;
+        vm.text = vm.$.text;
+        vm.audioTag = vm.$.audio;
+        vm.playButton = vm.$.play;
 
 
-    vm.playButton.addEventListener('click', function() {
-      if (vm.audioTag.paused) {
-        vm.audioTag.play();
-      } else {
-        vm.audioTag.pause();
-      }
-    });
+        vm.playButton.addEventListener('click', function() {
+          if (vm.audioTag.paused) {
+            vm.audioTag.play();
+          } else {
+            vm.audioTag.pause();
+          }
+        });
 
-    vm.result.style.display = 'none';
+        vm.result.style.display = 'none';
 
-}
-    attached() {
-        console.log("hellll");
     }
     getAudioURLByFlag(flag){
         var url = null;
@@ -75,27 +70,27 @@ class GAudioLoad extends Polymer.Element {
     }
     getPeaks(data) {
 
-      // What we're going to do here, is to divide up our audio into parts.
+        // What we're going to do here, is to divide up our audio into parts.
 
-      // We will then identify, for each part, what the loudest sample is in that
-      // part.
+        // We will then identify, for each part, what the loudest sample is in that
+        // part.
 
-      // It's implied that that sample would represent the most likely 'beat'
-      // within that part.
+        // It's implied that that sample would represent the most likely 'beat'
+        // within that part.
 
-      // Each part is 0.5 seconds long - or 22,050 samples.
+        // Each part is 0.5 seconds long - or 22,050 samples.
 
-      // This will give us 60 'beats' - we will only take the loudest half of
-      // those.
+        // This will give us 60 'beats' - we will only take the loudest half of
+        // those.
 
-      // This will allow us to ignore breaks, and allow us to address tracks with
-      // a BPM below 120.
+        // This will allow us to ignore breaks, and allow us to address tracks with
+        // a BPM below 120.
 
-      var partSize = 22050,
+        var partSize = 22050,
           parts = data[0].length / partSize,
           peaks = [];
 
-      for (var i = 0; i < parts; i++) {
+        for (var i = 0; i < parts; i++) {
         var max = 0;
         for (var j = i * partSize; j < (i + 1) * partSize; j++) {
           var volume = Math.max(Math.abs(data[0][j]), Math.abs(data[1][j]));
@@ -107,39 +102,39 @@ class GAudioLoad extends Polymer.Element {
           }
         }
         peaks.push(max);
-      }
+        }
 
-      // We then sort the peaks according to volume...
+        // We then sort the peaks according to volume...
 
-      peaks.sort(function(a, b) {
+        peaks.sort(function(a, b) {
         return b.volume - a.volume;
-      });
+        });
 
-      // ...take the loundest half of those...
+        // ...take the loundest half of those...
 
-      peaks = peaks.splice(0, peaks.length * 0.5);
+        peaks = peaks.splice(0, peaks.length * 0.5);
 
-      // ...and re-sort it back based on position.
+        // ...and re-sort it back based on position.
 
-      peaks.sort(function(a, b) {
+        peaks.sort(function(a, b) {
         return a.position - b.position;
-      });
+        });
 
-      return peaks;
+        return peaks;
     }
     getIntervals(peaks) {
 
-      // What we now do is get all of our peaks, and then measure the distance to
-      // other peaks, to create intervals.  Then based on the distance between
-      // those peaks (the distance of the intervals) we can calculate the BPM of
-      // that particular interval.
+        // What we now do is get all of our peaks, and then measure the distance to
+        // other peaks, to create intervals.  Then based on the distance between
+        // those peaks (the distance of the intervals) we can calculate the BPM of
+        // that particular interval.
 
-      // The interval that is seen the most should have the BPM that corresponds
-      // to the track itself.
+        // The interval that is seen the most should have the BPM that corresponds
+        // to the track itself.
 
-      var groups = [];
+        var groups = [];
 
-      peaks.forEach(function(peak, index) {
+        peaks.forEach(function(peak, index) {
         for (var i = 1; (index + i) < peaks.length && i < 10; i++) {
           var group = {
             tempo: (60 * 44100) / (peaks[index + i].position - peak.position),
@@ -162,15 +157,15 @@ class GAudioLoad extends Polymer.Element {
             groups.push(group);
           }
         }
-      });
-      return groups;
+        });
+        return groups;
     }
     onSubmit(formEvent) {
-      console.log("submitting....");
-      var vm = this;
-      formEvent.preventDefault();
-      vm.result.style.display = 'none';
-      vm.spotifyApi.searchTracks(
+        console.log("submitting....");
+        var vm = this;
+        formEvent.preventDefault();
+        vm.result.style.display = 'none';
+        vm.spotifyApi.searchTracks(
         vm.queryInput.value.trim(), {limit: 1})
         .then(function(results) {
           console.log(results);
