@@ -8,10 +8,15 @@
 <link rel="import" href="./g-audio-load.html">
 <link rel="import" href="./g-oscillator.html">
 <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+<!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>-->
 
 
 <dom-module id="g-spectrogram">
-  <template>
+  <template>    <!--
+   Latest compiled and minified CSS 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+
   <style>
     canvas {
       position: absolute;
@@ -51,7 +56,6 @@
       <g-oscillator log={{log}} speed={{speed}}></g-oscillator>
     </template>
     <h1>Spectrogram &amp; Oscillator</h1>
-    
     <div class="controlButton">
         <paper-button toggles raised class="green" on-click="_controlEvent">{{controlLabel}}</paper-button>
     </div>
