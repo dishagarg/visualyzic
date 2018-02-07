@@ -1,7 +1,7 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My App description",
+  "name": "visualyzic",
+  "short_name": "visualyzic",
+  "description": "A sonic visualizer",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",

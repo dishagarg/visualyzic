@@ -1,7 +1,7 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "visualyzic",
   "authors": [
-    "The Polymer Authors"
+    "Disha Garg"
   ],
   "license": "https://polymer.github.io/LICENSE.txt",
   "dependencies": {
