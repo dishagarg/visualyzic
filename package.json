@@ -17,6 +17,8 @@
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI",
+    "pbuild": "polymer build",
+    "pbuildserve": "polymer serve build/es6-bundled",
     "start": "polymer serve --open"
   }
 }

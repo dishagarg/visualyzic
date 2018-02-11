@@ -8,8 +8,13 @@
   ],
   "sources": [
     "src/**/*",
+    "styles/**/*",
+    "sounds/**/*",
     "images/**/*",
-    "bower.json"
+    "test/**/*",
+    "bower.json",
+    "package.json",
+    "spotify-web-api.js"
   ],
   "extraDependencies": [
     "manifest.json",
