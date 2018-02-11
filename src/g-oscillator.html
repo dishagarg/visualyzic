@@ -89,7 +89,7 @@ class GOscillator extends Polymer.Element {
         continue;
       }
       var x = this.width - (this.history.length - i - 1) * this.speed;
-      // TODO(smus): Elimiate fudge factor.
+      // TODO: Eliminate fudge factor.
       ctx.fillStyle = 'red';
       ctx.fillRect(x - size/2, y - size/2, size, size);
     }
@@ -225,7 +225,7 @@ class GOscillator extends Polymer.Element {
     var gain = context.createGain();
     gain.gain.value = 0;
     gain.connect(context.destination);
-    // TODO(smus): Clean this up!
+    // TODO: Clean this up!
     this.gain_ = gain;
 
     // Create an oscillator and connect it through the gain.
