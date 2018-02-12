@@ -1,7 +1,8 @@
+/* eslint-disable */
 // Assumes context is an AudioContext defined outside of this class.
 
 class GSpectrogram extends Polymer.Element {
-  static get is() { return 'g-spectrogram'; }
+  static get is() {return 'g-spectrogram';}
 
   static get properties() {
     return {
@@ -10,25 +11,25 @@ class GSpectrogram extends Polymer.Element {
           type: Boolean,
           notify: true,
           reflectToAttribute: true,
-          value: false
+          value: false,
       },
-      controlLabel:{
+      controlLabel: {
           type: String,
           notify: true,
           reflectToAttribute: true,
-          value: "Open Controls"
+          value: 'Open Controls',
       },
       songPlay: {
           type: Boolean,
           notify: true,
           reflectToAttribute: true,
-          value: false
+          value: false,
       },
-      songPlayLabel:{
+      songPlayLabel: {
           type: String,
           notify: true,
           reflectToAttribute: true,
-          value: "Open Play Panel"
+          value: 'Open Play Panel',
       },
       // Log mode.
       log: {
@@ -36,45 +37,45 @@ class GSpectrogram extends Polymer.Element {
           notify: true,
           reflectToAttribute: true,
           observer: '_logChanged',
-          value: false
+          value: false,
       },
         labels: {
           type: Boolean,
           notify: true,
           reflectToAttribute: true,
           observer: '_labelsChanged',
-          value: false
+          value: false,
       },
         ticks: {
           type: Number,
           notify: true,
           reflectToAttribute: true,
           observer: '_ticksChanged',
-          value: 5
+          value: 5,
       },
       // FFT bin size,
       fftsize: {
           type: Number,
           notify: true,
           reflectToAttribute: true,
-          value: 2048
+          value: 2048,
       },
       oscillator: {
           type: Boolean,
           notify: true,
           reflectToAttribute: true,
-          value: false
+          value: false,
       },
     };
   }
 
   connectedCallback() {
-    super.connectedCallback(); 
+    super.connectedCallback();
     this.tempCanvas = document.createElement('canvas'),
     console.log('Created spectrogram');
     // Get input from the microphone.
     if (navigator.mozGetUserMedia) {
-      //callbacks defined with the media function.
+      // callbacks defined with the media function.
       navigator.mozGetUserMedia({audio: true},
                                 this.onStream.bind(this),
                                 this.onStreamError.bind(this));
@@ -85,22 +86,22 @@ class GSpectrogram extends Polymer.Element {
     }
     this.ctx = this.$.canvas.getContext('2d');
   }
-  _controlEvent(){
-      if(this.controlLabel=='Open Controls'){
+  _controlEvent() {
+      if (this.controlLabel=='Open Controls') {
         this.controls = true;
-        this.controlLabel = 'Close Controls'
-      } else{
+        this.controlLabel = 'Close Controls';
+      } else {
         this.controls = false;
-        this.controlLabel = 'Open Controls'
+        this.controlLabel = 'Open Controls';
       }
   }
-  _songPlayEvent(){
-      if(this.songPlayLabel=='Open Play Panel'){
+  _songPlayEvent() {
+      if (this.songPlayLabel=='Open Play Panel') {
         this.songPlay = true;
-        this.songPlayLabel = 'Close Play Panel'
-      } else{
+        this.songPlayLabel = 'Close Play Panel';
+      } else {
         this.songPlay = false;
-        this.songPlayLabel = 'Open Play Panel'
+        this.songPlayLabel = 'Open Play Panel';
       }
   }
 
@@ -123,15 +124,15 @@ class GSpectrogram extends Polymer.Element {
     }
     console.log(this.t_domain);
 
-    if(this.t_domain==="time"){
+    if (this.t_domain==='time') {
         this.renderTimeDomain();
     }
-      else{
+      else {
         this.renderFreqDomain();
     }
 
     if (this.labels && didResize) {
-      //change the axeslabels if resize did happen and labels are true
+      // change the axeslabels if resize did happen and labels are true
       this.renderAxesLabels();
     }
 
@@ -145,7 +146,7 @@ class GSpectrogram extends Polymer.Element {
   }
 
   renderTimeDomain() {
-    console.log("renderTimeDomain");
+    console.log('renderTimeDomain');
     var times = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteTimeDomainData(times);
 
@@ -161,7 +162,7 @@ class GSpectrogram extends Polymer.Element {
   }
 
   renderFreqDomain() {
-    console.log("renderFreqDomain");
+    console.log('renderFreqDomain');
     var freq = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteFrequencyData(freq);
 
@@ -169,7 +170,7 @@ class GSpectrogram extends Polymer.Element {
     // Copy the current canvas onto the temp canvas.
     this.tempCanvas.width = this.width;
     this.tempCanvas.height = this.height;
-    //console.log(this.$.canvas.height, this.tempCanvas.height);
+    // console.log(this.$.canvas.height, this.tempCanvas.height);
     var tempCtx = this.tempCanvas.getContext('2d');
     tempCtx.drawImage(this.$.canvas, 0, 0, this.width, this.height);
 
@@ -183,7 +184,8 @@ class GSpectrogram extends Polymer.Element {
       } else {
         value = freq[i];
       }
-      ctx.fillStyle = (this.color ? this.getFullColor(value) : this.getGrayColor(value));
+      ctx.fillStyle = (this.color ? this.getFullColor(value) :
+                       this.getGrayColor(value));
 
       var percent = i / freq.length;
       var y = Math.round(percent * this.height);
@@ -206,8 +208,8 @@ class GSpectrogram extends Polymer.Element {
    * Given an index and the total number of entries, return the
    * log-scaled value.
    */
-  logScale(index, total, opt_base) {
-    var base = opt_base || 2;
+  logScale(index, total, optBase) {
+    var base = optBase || 2;
     var logmax = this.logBase(total + 1, base);
     var exp = logmax * index / total;
     return Math.round(Math.pow(base, exp) - 1);
@@ -243,7 +245,7 @@ class GSpectrogram extends Polymer.Element {
         // Never show 0 Hz.
         freq = Math.max(1, this.indexToFreq(logIndex));
       }
-      var label = this.formatFreq(freq);
+      label = this.formatFreq(freq);
       var units = this.formatUnits(freq);
       ctx.font = '16px Inconsolata';
       // Draw the value.
@@ -254,7 +256,7 @@ class GSpectrogram extends Polymer.Element {
       ctx.fillText(units, x + 10, y + yLabelOffset);
       // Draw a tick mark.
       ctx.fillRect(x + 40, y, 30, 2);
-        console.log("axes");
+        console.log('axes');
     }
   }
 
@@ -287,7 +289,7 @@ class GSpectrogram extends Polymer.Element {
   }
 
   onStream(stream) {
-    console.log("dhkf");
+    console.log('dhkf');
     var input = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
     analyser.smoothingTimeConstant = 0;
@@ -317,9 +319,9 @@ class GSpectrogram extends Polymer.Element {
     var hue = fromH + delta;
     return ('hsl(H, 120%, 50%)'.replace(/H/g, hue));
   }
-  
+
   _logChanged() {
-    console.log("loggggg");
+    console.log('loggggg');
     if (this.labels) {
       this.renderAxesLabels();
     }

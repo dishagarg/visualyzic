@@ -1,14 +1,15 @@
+/* eslint-disable */
 
 class GAudioLoad extends Polymer.Element {
-    static get is() { return 'g-audio-load'; }
+    static get is() {return 'g-audio-load';}
     static get properties() {
         return {
             load: {
               type: Boolean,
               notify: true,
               reflectToAttribute: true,
-              value: false
-          }
+              value: false,
+          },
         };
     }
     ready() {
@@ -36,44 +37,42 @@ class GAudioLoad extends Polymer.Element {
         });
 
         vm.result.style.display = 'none';
-
     }
-    getAudioURLByFlag(flag){
+    getAudioURLByFlag(flag) {
         var url = null;
-        if(flag==='drums'){
+        if (flag==='drums') {
             url ='https://chinmay.audio/decodethis/public/audio/drmapan.wav';
-        }else{
+        } else {
             url='https://chinmay.audio/decodethis/public/audio/M1F1-float32WE-AFsp.wav';
         }
         return url;
     }
     loadAudio(e) {
-        console.log("loading audio....");
+        console.log('loading audio....');
         var ajaxReq = new XMLHttpRequest();
         var audioUrl = this.getAudioURLByFlag(e.target.getAttribute('link'));
         ajaxReq.open('GET', audioUrl, true);
         ajaxReq.responseType = 'arraybuffer';
-        ajaxReq.onload = function(){
+        ajaxReq.onload = function() {
             var undecodedAudioData = ajaxReq.response;
-            context.decodeAudioData(undecodedAudioData, function(buffer){
+            context.decodeAudioData(undecodedAudioData, function(buffer) {
                 var soundSource = context.createBufferSource();
                 soundSource.buffer = buffer;
-                soundSource.connect(context.destination);  // AudioNode
+                soundSource.connect(context.destination); // AudioNode
                 soundSource.loop = true;
                 soundSource.start(context.currentTime);
                 soundSource.stop(context.currentTime+3);
-            }, function(e){
+            }, function(e) {
                 console.error('decodeAudioData error', e);
             });
         };
         ajaxReq.send();
     }
     getPeaks(data) {
-
         // What we're going to do here, is to divide up our audio into parts.
 
-        // We will then identify, for each part, what the loudest sample is in that
-        // part.
+        // We will then identify, for each part, what the loudest sample is
+        // in that part.
 
         // It's implied that that sample would represent the most likely 'beat'
         // within that part.
@@ -83,12 +82,12 @@ class GAudioLoad extends Polymer.Element {
         // This will give us 60 'beats' - we will only take the loudest half of
         // those.
 
-        // This will allow us to ignore breaks, and allow us to address tracks with
-        // a BPM below 120.
+        // This will allow us to ignore breaks, and allow us to address tracks
+        // with a BPM below 120.
 
-        var partSize = 22050,
-          parts = data[0].length / partSize,
-          peaks = [];
+        var partSize = 22050;
+        var parts = data[0].length / partSize;
+        var peaks = [];
 
         for (var i = 0; i < parts; i++) {
         var max = 0;
@@ -97,7 +96,7 @@ class GAudioLoad extends Polymer.Element {
           if (!max || (volume > max.volume)) {
             max = {
               position: j,
-              volume: volume
+              volume: volume,
             };
           }
         }
@@ -123,14 +122,13 @@ class GAudioLoad extends Polymer.Element {
         return peaks;
     }
     getIntervals(peaks) {
+        // What we now do is get all of our peaks, and then measure the
+        // distance to other peaks, to create intervals.  Then based on the
+        // distance between those peaks (the distance of the intervals) we can
+        // calculate the BPM of that particular interval.
 
-        // What we now do is get all of our peaks, and then measure the distance to
-        // other peaks, to create intervals.  Then based on the distance between
-        // those peaks (the distance of the intervals) we can calculate the BPM of
-        // that particular interval.
-
-        // The interval that is seen the most should have the BPM that corresponds
-        // to the track itself.
+        // The interval that is seen the most should have the BPM that
+        // corresponds to the track itself.
 
         var groups = [];
 
@@ -138,7 +136,7 @@ class GAudioLoad extends Polymer.Element {
         for (var i = 1; (index + i) < peaks.length && i < 10; i++) {
           var group = {
             tempo: (60 * 44100) / (peaks[index + i].position - peak.position),
-            count: 1
+            count: 1,
           };
 
           while (group.tempo < 90) {
@@ -161,7 +159,7 @@ class GAudioLoad extends Polymer.Element {
         return groups;
     }
     onSubmit(formEvent) {
-        console.log("submitting....");
+        console.log('submitting....');
         var vm = this;
         formEvent.preventDefault();
         vm.result.style.display = 'none';
@@ -177,24 +175,23 @@ class GAudioLoad extends Polymer.Element {
           request.open('GET', previewUrl, true);
           request.responseType = 'arraybuffer';
           request.onload = function() {
-
             // Create offline context
-            var OfflineContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+            var OfflineContext = window.OfflineAudioContext ||
+                window.webkitOfflineAudioContext;
             var offlineContext = new OfflineContext(2, 30 * 44100, 44100);
 
             offlineContext.decodeAudioData(request.response, function(buffer) {
-
               // Create buffer source
               var source = offlineContext.createBufferSource();
               source.buffer = buffer;
 
-              // Beats, or kicks, generally occur around the 100 to 150 hz range.
-              // Below this is often the bassline.  So let's focus just on that.
+              // Beats or kicks, generally occur around the 100 to 150 hz range
+              // Below this is often the bassline.  So let's focus just on that
 
               // First a lowpass to remove most of the song.
 
               var lowpass = offlineContext.createBiquadFilter();
-              lowpass.type = "lowpass";
+              lowpass.type = 'lowpass';
               lowpass.frequency.value = 150;
               lowpass.Q.value = 1;
 
@@ -205,7 +202,7 @@ class GAudioLoad extends Polymer.Element {
               // Now a highpass to remove the bassline.
 
               var highpass = offlineContext.createBiquadFilter();
-              highpass.type = "highpass";
+              highpass.type = 'highpass';
               highpass.frequency.value = 100;
               highpass.Q.value = 1;
 
@@ -217,7 +214,7 @@ class GAudioLoad extends Polymer.Element {
 
               highpass.connect(offlineContext.destination);
 
-              // Start the source, and render the output into the offline conext.
+              // Start the source, & render the output into the offline conext.
 
               source.start(0);
               offlineContext.startRendering();
@@ -226,7 +223,8 @@ class GAudioLoad extends Polymer.Element {
             offlineContext.oncomplete = function(e) {
               var buffer = e.renderedBuffer;
               console.log(this);
-              var peaks = vm.getPeaks([buffer.getChannelData(0), buffer.getChannelData(1)]);
+              var peaks = vm.getPeaks([buffer.getChannelData(0),
+                                       buffer.getChannelData(1)]);
               var groups = vm.getIntervals(peaks);
 
               var svg = vm.$.svg;
@@ -235,7 +233,8 @@ class GAudioLoad extends Polymer.Element {
               var rect;
               peaks.forEach(function(peak) {
                 rect = document.createElementNS(svgNS, 'rect');
-                rect.setAttributeNS(null, 'x', (100 * peak.position / buffer.length) + '%');
+                rect.setAttributeNS(null, 'x',
+                                (100 * peak.position / buffer.length) + '%');
                 rect.setAttributeNS(null, 'y', 0);
                 rect.setAttributeNS(null, 'width', 1);
                 rect.setAttributeNS(null, 'height', '100%');
@@ -255,8 +254,10 @@ class GAudioLoad extends Polymer.Element {
                 return intB.count - intA.count;
               }).splice(0, 5);
 
-              vm.text.innerHTML = '<div id="guess">Guess for track <strong>' + track.name + '</strong> by ' +
-                '<strong>' + track.artists[0].name + '</strong> is <strong>' + Math.round(top[0].tempo) + ' BPM</strong>' +
+              vm.text.innerHTML = '<div id="guess">Guess for track <strong>' +
+                  track.name + '</strong> by ' +
+                '<strong>' + track.artists[0].name + '</strong> is <strong>' +
+                  Math.round(top[0].tempo) + ' BPM</strong>' +
                 ' with ' + top[0].count + ' samples.</div>';
 
               vm.text.innerHTML += '<div class="small">Other options are ' +
@@ -266,7 +267,8 @@ class GAudioLoad extends Polymer.Element {
                 '</div>';
 
               var printENBPM = function(tempo) {
-                vm.text.innerHTML += '<div class="small">The tempo according to Spotify is ' +
+                vm.text.innerHTML += '<div class="small">' +
+                    'The tempo according to Spotify is ' +
                       tempo + ' BPM</div>';
               };
               vm.spotifyApi.getAudioFeaturesForTrack(track.id)
