@@ -21,6 +21,7 @@ install:
 - polymer install
 script:
 - npm run lint
+- polymer build
 before_deploy: "echo 'ready to deploy?'"
 deploy:
   provider: firebase
