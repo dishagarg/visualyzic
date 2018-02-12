@@ -22,7 +22,10 @@
   ],
     
   "lint": {
-    "rules": ["polymer-2"]
+    "rules": ["polymer-2"],
+    "ignoreWarnings": ["undefined-elements",
+                      "databind-with-unknown-property",
+                      "unknown-superclass"]
   },
   "builds": [
     {
