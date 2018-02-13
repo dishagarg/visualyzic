@@ -16,4 +16,5 @@ body, html {
   width: 500px;
   font-family: 'Inconsolata';
   font-size: 120%;
+  opacity: 0.3;
 }

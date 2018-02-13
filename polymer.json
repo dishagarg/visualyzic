@@ -1,0 +1,41 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/g-spectrogram.html",
+  "fragments": [
+    "src/g-spectrogram-controls.html",
+    "src/g-oscillator.html",
+    "src/g-audio-load.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "styles/**/*",
+    "sounds/**/*",
+    "images/**/*",
+    "test/**/*",
+    "bower.json",
+    "package.json",
+    "spotify-web-api.js"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+    
+  "lint": {
+    "rules": ["polymer-2"],
+    "ignoreWarnings": ["undefined-elements",
+                      "databind-with-unknown-property",
+                      "unknown-superclass"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled"
+    },
+    {
+      "preset": "es6-bundled"
+    },
+    {
+      "preset": "es6-unbundled"
+    }
+  ]
+}

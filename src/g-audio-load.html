@@ -1,0 +1,50 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+<link href="../bower_components/paper-input/paper-input.html" rel="import">
+<link href="../bower_components/paper-button/paper-button.html" rel="import">
+
+<dom-module id="g-audio-load">
+  <template>
+    <style>
+      :host {
+        display: block;
+          padding: 1em;
+        background: rgba(255, 255, 255, 0.5);
+        margin: 1em;
+        border: rgba(0, 0, 0, 0.3);
+        border-width: 1px;
+        border-style: solid;
+        font-family: 'Inconsolata', sans-serif;
+        z-index: 10;
+        width: 200px;
+      }
+      svg {
+        border: 1px solid #eee;
+      }
+
+    </style>
+    <paper-button raised type="button" id="btn" on-click="loadAudio" link="drums">Drums</paper-button>
+    <paper-button raised type="button" id="btn" on-click="loadAudio" link="common">Common</paper-button>
+    <h4>Search any song here (Spotify)</h4>
+    <form id="form">
+        <paper-input id="query" floatingLabel label="Type the name of a track"></paper-input>
+        <paper-button type="submit" raised class="custom indigo" on-click="onSubmit">Search track &amp; Calculate tempo</paper-button>
+    </form>
+
+    <div id="result">
+        <div id="text"></div>
+        <div>
+            <svg width="100%" height="40" id="svg"></svg>
+            <button id="play">Play track</button>
+        </div>
+
+        <audio id="audio"></audio>
+    </div>
+  </template>
+  <script src="g-audio-load.js"></script>
+    
+</dom-module>

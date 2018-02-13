@@ -8,11 +8,10 @@ https://jmperezperez.com/bpm-detection-javascript/
 # How to start?
 
 1. Run `npm install`
-2. `npm install -g gulp`
-3. `gulp browser-sync`
-This should fire up your default browser.
-It reloads for a while and then asks for a mic permission.
-
+2. `bower install`
+3. `npm install -g polymer-cli`
+4. `polymer serve --open`
+This should fire up your default browser and asks for a mic permission.
 
 
 # Configuration parameters
