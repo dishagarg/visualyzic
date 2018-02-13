@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/dishagarg/FinalProject"
   },
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.0",
