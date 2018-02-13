@@ -1,20 +1,21 @@
-A live-input spectrogram written using [Polymer][polymer] using the [Web
-Audio API][wapi].
+A spectrogram written using [Polymer](https://www.polymer-project.org/2.0/start/) with the [Web
+Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
+This spectrogram can process a live-input or detect and play any song using spotify API.
+Give it a go!
 
-https://jmperezperez.com/bpm-detection-javascript/
-
-<!--more-->
-
-# How to start?
-
-1. Run `npm install`
-2. `bower install`
-3. `npm install -g polymer-cli`
-4. `polymer serve --open`
-This should fire up your default browser and asks for a mic permission.
+https://visualyzic.firebaseapp.com/
 
 
-# Configuration parameters
+# How to run locally?
+
+1. Run `npm install -g bower polymer-cli`
+2. `npm install`
+3. `bower install`
+4. `npm start`
+This should fire up your default browser and ask for a mic permission.
+
+
+# About configuration parameters
 
 The following are HTML attributes of the `g-spectrogram` component. Many
 of them are also configurable via the spectrogram controls component,
@@ -31,18 +32,18 @@ which shows up if the `controls` attribute is set to true.
   to the frequency you click on.
 
 
-# Using the Polymer component
+# About using a Polymer component
 
 Simplest possible version:
 
     <g-spectrogram/>
 
-Enable controls:
+Enabling controls:
 
     <g-spectrogram controls>
     </g-spectrogram>
 
-Pass parameters to the component:
+Passing parameters to a component:
 
     <g-spectrogram log labels ticks="10">
     </g-spectrogram>
