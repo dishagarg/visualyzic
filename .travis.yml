@@ -21,8 +21,9 @@ install:
 - polymer install
 script:
 - npm run lint
-- polymer build
-before_deploy: "echo 'ready to deploy?'"
+before_deploy:
+- test $TRAVIS_TEST_RESULT = 0 \  # check that build passed successfully
+  && polymer build
 deploy:
   provider: firebase
   token:

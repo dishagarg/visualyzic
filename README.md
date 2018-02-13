@@ -14,7 +14,6 @@ https://jmperezperez.com/bpm-detection-javascript/
 This should fire up your default browser and asks for a mic permission.
 
 
-
 # Configuration parameters
 
 The following are HTML attributes of the `g-spectrogram` component. Many
