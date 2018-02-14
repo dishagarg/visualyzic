@@ -2,7 +2,7 @@
   "name": "visualyzic",
   "scope": "./",
   "short_name": "visualyzic",
-  "description": "A sonic visualizer",
+  "description": "A live-input visualizer",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
