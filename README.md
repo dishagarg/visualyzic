@@ -3,6 +3,8 @@ Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
 This spectrogram can process a live-input or detect and play any song using spotify API.
 Give it a go!
 
+[![Build Status](https://travis-ci.com/dishagarg/visualyzic.svg?token=Ym2qacLuVZVRcQVKqXsU&branch=master)](https://travis-ci.com/dishagarg/visualyzic)
+
 https://visualyzic.firebaseapp.com/
 
 
