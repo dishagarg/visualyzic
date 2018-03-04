@@ -9,6 +9,7 @@
   "sources": [
     "src/**/*",
     "styles/**/*",
+    "images/**/*",
     "test/**/*",
     "bower.json",
     "package.json",
