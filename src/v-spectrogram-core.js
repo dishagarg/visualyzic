@@ -1,8 +1,8 @@
 /* eslint-disable */
 // Assumes context is an AudioContext defined outside of this class.
 
-class GSpectrogram extends Polymer.Element {
-  static get is() {return 'g-spectrogram';}
+class VSpectrogramCore extends Polymer.Element {
+  static get is() {return 'v-spectrogram-core';}
 
   static get properties() {
     return {
@@ -341,4 +341,4 @@ class GSpectrogram extends Polymer.Element {
     }
   }
 }
-window.customElements.define(GSpectrogram.is, GSpectrogram);
+window.customElements.define(VSpectrogramCore.is, VSpectrogramCore);

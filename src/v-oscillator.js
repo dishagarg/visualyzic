@@ -1,8 +1,8 @@
 /* eslint-disable */
 // Assumes context is an AudioContext defined outside of this class.
 
-class GOscillator extends Polymer.Element {
-    static get is() {return 'g-oscillator';}
+class VOscillator extends Polymer.Element {
+    static get is() {return 'v-oscillator';}
     static get properties() {
         return {
             gainAmount: {
@@ -238,4 +238,4 @@ class GOscillator extends Polymer.Element {
     return Math.log(val) / Math.log(base);
   }
 }
-    window.customElements.define(GOscillator.is, GOscillator);
+    window.customElements.define(VOscillator.is, VOscillator);

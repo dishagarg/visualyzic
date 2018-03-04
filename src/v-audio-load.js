@@ -1,7 +1,7 @@
 /* eslint-disable */
 
-class GAudioLoad extends Polymer.Element {
-    static get is() {return 'g-audio-load';}
+class VAudioLoad extends Polymer.Element {
+    static get is() {return 'v-audio-load';}
     static get properties() {
         return {
             load: {
@@ -283,4 +283,4 @@ class GAudioLoad extends Polymer.Element {
         });
     }
 }
-window.customElements.define(GAudioLoad.is, GAudioLoad);
+window.customElements.define(VAudioLoad.is, VAudioLoad);

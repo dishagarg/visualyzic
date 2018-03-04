@@ -1,7 +1,7 @@
 /* eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
 
-class GSpectrogramControls extends Polymer.Element {
-  static get is() {return 'g-spectrogram-controls';}
+class VSpectrogramControls extends Polymer.Element {
+  static get is() {return 'v-spectrogram-controls';}
 
   static get properties() {
     return {
@@ -48,4 +48,4 @@ class GSpectrogramControls extends Polymer.Element {
     console.log('Created spectrogram controls');
   }
 }
-window.customElements.define(GSpectrogramControls.is, GSpectrogramControls);
+window.customElements.define(VSpectrogramControls.is, VSpectrogramControls);

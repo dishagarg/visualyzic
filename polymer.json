@@ -1,16 +1,14 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/g-spectrogram.html",
+  "shell": "src/v-spectrogram-core.html",
   "fragments": [
-    "src/g-spectrogram-controls.html",
-    "src/g-oscillator.html",
-    "src/g-audio-load.html"
+    "src/v-spectrogram-controls.html",
+    "src/v-oscillator.html",
+    "src/v-audio-load.html"
   ],
   "sources": [
     "src/**/*",
     "styles/**/*",
-    "sounds/**/*",
-    "images/**/*",
     "test/**/*",
     "bower.json",
     "package.json",
