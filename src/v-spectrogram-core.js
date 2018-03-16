@@ -127,7 +127,9 @@ class VSpectrogramCore extends Polymer.Element {
     if (this.t_domain==='time') {
         this.renderTimeDomain();
     }
-      else {
+      else if (this.t_domain==='animation') {
+        this.renderAnimationScene();
+    } else {
         this.renderFreqDomain();
     }
 
@@ -159,6 +161,21 @@ class VSpectrogramCore extends Polymer.Element {
       this.ctx.fillStyle = 'black';
       this.ctx.fillRect(i * barWidth, offset, 1, 1);
     }
+  }
+    
+  renderAnimationScene() {
+    console.log('renderAnimationScene');
+    var freq = new Uint8Array(this.analyser.frequencyBinCount);
+    var times = new Uint8Array(this.analyser.frequencyBinCount);
+    var dataArray = new Float32Array(this.analyser.fftSize);
+    this.analyser.getByteFrequencyData(freq);
+    this.analyser.getByteTimeDomainData(times);
+    this.analyser.getFloatTimeDomainData(dataArray);
+    
+    var ctx = this.ctx;
+    // Copy the current canvas onto the temp canvas.
+    this.tempCanvas.width = this.width;
+    this.tempCanvas.height = this.height;
   }
 
   renderFreqDomain() {
@@ -339,6 +356,10 @@ class VSpectrogramCore extends Polymer.Element {
     } else {
       this.clearAxesLabels();
     }
+  }
+    
+  _isAnimation(t_domain){
+      return t_domain === 'animation';
   }
 }
 window.customElements.define(VSpectrogramCore.is, VSpectrogramCore);

@@ -7,6 +7,7 @@
 <link rel="import" href="./v-spectrogram-controls.html">
 <link rel="import" href="./v-audio-load.html">
 <link rel="import" href="./v-oscillator.html">
+<link rel="import" href="./v-scene.html">
 <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 <!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>-->
@@ -54,6 +55,9 @@
     <canvas id="labels"></canvas>
     <template is="dom-if" if="{{oscillator}}">
       <v-oscillator log={{log}} speed={{speed}}></v-oscillator>
+    </template>      
+    <template is="dom-if" if="{{_isAnimation(t_domain)}}">
+      <v-scene></v-scene>
     </template>
     <h1>Live-input visualizer with Oscillator</h1>
     <div class="controlButton">
