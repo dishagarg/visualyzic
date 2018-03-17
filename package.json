@@ -18,5 +18,8 @@
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI",
     "start": "polymer serve --open"
+  },
+  "dependencies": {
+    "three": "^0.91.0"
   }
 }
