@@ -50,11 +50,13 @@ class VScene extends Polymer.Element {
     this.scene.add(pointLight);
     this.scene.add(this.sphere);
       
-      console.log("hello: ", isBeat, volume)
-    this.attributeChanged();
+    //console.log("hello: ", this.isBeat, this.volume)
+    //this.attributeChanged();
   }
 
-  attributeChanged() {
+  attributeChangedCallback() {
+    super.attributeChangedCallback();
+    console.log("hello: ", this.isBeat, this.volume)
     // change sphere color every beat
     if (this.isBeat) {
       let color = this.sphereColors[this.activeColor];
@@ -71,7 +73,5 @@ class VScene extends Polymer.Element {
     this.renderer.render(this.scene, this.camera);
     
   }
-
-
 }
 window.customElements.define(VScene.is, VScene);

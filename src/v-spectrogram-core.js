@@ -129,7 +129,7 @@ class VSpectrogramCore extends Polymer.Element {
       this.$.labels.height = this.height;
       didResize = true;
     }
-    console.log(this.t_domain);
+    //console.log(this.t_domain);
 
     if (this.t_domain==='time') {
         this.renderTimeDomain();
@@ -171,7 +171,7 @@ class VSpectrogramCore extends Polymer.Element {
   }
     
   renderAnimationScene() {
-    console.log('renderAnimationScene');
+    //console.log('renderAnimationScene');
     
     // init options
     this.volSens = this.volSens || 1;
@@ -193,8 +193,8 @@ class VSpectrogramCore extends Polymer.Element {
     this.levels = this.getNormalizedLevels();   // used for nothing but volume
     this.volume = this.getAverageVolumeLevel();   // used for the ball in scene
     this.isBeat = this.getBeatTime();  // used to change the color of the ball on every beat
-    console.log('waveform: ', this.waveform);
-    console.log('isBeat: ', this.isBeat);
+    //console.log('waveform: ', this.waveform);
+    //console.log('isBeat: ', this.isBeat);
   }
 
   getBeatTime() {
