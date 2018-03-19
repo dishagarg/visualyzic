@@ -20,6 +20,7 @@
     "start": "polymer serve --open"
   },
   "dependencies": {
+    "lodash": "^4.17.5",
     "three": "^0.91.0"
   }
 }

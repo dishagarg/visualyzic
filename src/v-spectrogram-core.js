@@ -1,6 +1,13 @@
 /* eslint-disable */
 // Assumes context is an AudioContext defined outside of this class.
 
+var beatCutOff = 0;
+var beatTime = 0;
+var msecsAvg = 640;
+var bpmTime = 0;
+var ratedBPMTime = 550;
+var bpmStart = Date.now();
+
 class VSpectrogramCore extends Polymer.Element {
   static get is() {return 'v-spectrogram-core';}
 
@@ -165,19 +172,75 @@ class VSpectrogramCore extends Polymer.Element {
     
   renderAnimationScene() {
     console.log('renderAnimationScene');
-    var freq = new Uint8Array(this.analyser.frequencyBinCount);
-    var times = new Uint8Array(this.analyser.frequencyBinCount);
-    var dataArray = new Float32Array(this.analyser.fftSize);
-    this.analyser.getByteFrequencyData(freq);
-    this.analyser.getByteTimeDomainData(times);
-    this.analyser.getFloatTimeDomainData(dataArray);
     
-    var ctx = this.ctx;
-    // Copy the current canvas onto the temp canvas.
-    this.tempCanvas.width = this.width;
-    this.tempCanvas.height = this.height;
+    // init options
+    this.volSens = this.volSens || 1;
+    this.beatHoldTime = this.beatHoldTime || 45;
+    this.beatDecayRate = this.beatDecayRate || .9;
+    this.beatMin = this.beatMin || .2;
+    this.levelsCount = this.levelsCount || 16;
+      
+    this.freqArray = new Uint8Array(this.analyser.frequencyBinCount);
+    this.timeArray = new Uint8Array(this.analyser.frequencyBinCount);
+    this.dataArray = new Float32Array(this.analyser.fftSize);
+    this.analyser.getByteFrequencyData(this.freqArray);
+    this.analyser.getByteTimeDomainData(this.timeArray);
+    this.analyser.getFloatTimeDomainData(this.dataArray);
+    this.bufferLength = this.analyser.frequencyBinCount;
+      
+    
+    this.waveform = this.getNormalizedWaveform();  // used for the plane geometry in scene
+    this.levels = this.getNormalizedLevels();   // used for nothing but volume
+    this.volume = this.getAverageVolumeLevel();   // used for the ball in scene
+    this.isBeat = this.getBeatTime();  // used to change the color of the ball on every beat
+    console.log('waveform: ', this.waveform);
+    console.log('isBeat: ', this.isBeat);
   }
 
+  getBeatTime() {
+    if (this.volume > beatCutOff && this.volume > this.beatMin) {
+      beatCutOff = this.volume * 1.1;
+      beatTime = 0;
+    } else {
+      if (beatTime <= this.beatHoldTime) {
+        beatTime++;
+      } else {
+        beatCutOff *= this.beatDecayRate;
+        beatCutOff = Math.max(beatCutOff, this.beatMin);
+      }
+    }
+
+    bpmTime = (Date.now() - bpmStart) / msecsAvg;
+
+    return beatTime < 6;
+  }
+
+  getNormalizedWaveform() {
+    return _.times(this.bufferLength, function(i){
+      return ((this.timeArray[i] - 128) / 128) * this.volSens;
+    }.bind(this));
+  }
+
+  getNormalizedLevels() {
+    var bufferLength = this.bufferLength;   // frquencyBinCount = 128
+    var levelBins = Math.floor(bufferLength / this.levelsCount);  // levelsCount = 16
+    return _.times(this.levelsCount, (function(i){
+      var sum = 0;
+      _.times(levelBins, (function(j){
+        sum += this.freqArray[(i * levelBins) + j];
+      }).bind(this));
+      return sum / levelBins / 256 * this.volSens;
+    }).bind(this));
+  }
+
+  getAverageVolumeLevel() {
+    var sum = 0;
+    _.times(this.levelsCount, (function(i){
+      sum += this.levels[i];
+    }).bind(this));
+    return sum / this.levelsCount;
+  }
+    
   renderFreqDomain() {
     console.log('renderFreqDomain');
     var freq = new Uint8Array(this.analyser.frequencyBinCount);

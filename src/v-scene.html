@@ -6,7 +6,6 @@
 
 <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 
-
 <dom-module id="v-scene">
   <template>
   <style>
@@ -15,14 +14,15 @@
       width: 100%;
       height: 100%;
     }
-    h1 {
+    h4 {
       margin:2px 0 0 10px;
       font-family: 'Inconsolata';
+      color:red;
     }
   </style>
 
+    <h4 style="background-color: white">{{isBeat}}{{volume}}</h4>
   <div id="scene"></div>
   </template>
-  <script src="../node_modules/three/src/Three.js"></script>
   <script src="v-scene.js"></script>
 </dom-module>

@@ -57,7 +57,8 @@
       <v-oscillator log={{log}} speed={{speed}}></v-oscillator>
     </template>      
     <template is="dom-if" if="{{_isAnimation(t_domain)}}">
-      <v-scene></v-scene>
+    
+      <v-scene is-beat="{{isBeat}}" volume="{{volume}}"></v-scene>
     </template>
     <h1>Live-input visualizer with Oscillator</h1>
     <div class="controlButton">
@@ -81,5 +82,6 @@
     </template>
     </div>
   </template>
+  <script src="../node_modules/lodash/lodash.js"></script>
   <script src="v-spectrogram-core.js"></script>
 </dom-module>
