@@ -10,11 +10,21 @@ class VScene extends Polymer.Element {
           notify: true,
           reflectToAttribute: true
       },
-        volume: {
-            type: Number,
-            notify: true,
-            reflectToAttribute: true
-        },
+      volume: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true
+      },
+      waveform: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true
+      },
+      levels: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true
+      },
     };
   }
 
@@ -31,7 +41,7 @@ class VScene extends Polymer.Element {
     // add to dom
     this.$.scene.appendChild(this.renderer.domElement);
     var pointLight = new THREE.PointLight(0xFFFFFF, 1, 0, 2);
-    var ambientLight = new THREE.AmbientLight(0x404040);
+    var ambientLight = new THREE.AmbientLight(0x204040);
     // set where you want the light to be directed at
     pointLight.position.set(10, 50, 130);
     this.sphereColors = [{r:156,g:0,b:253},{r:0,g:255,b:249},{r:0,g:253,b:40},{r:245,g:253,b:0},{r:252,g:15,b:145}];
@@ -44,11 +54,28 @@ class VScene extends Polymer.Element {
     });
     var sphereGeometry = new THREE.SphereGeometry(sphereRadius, sphereSegments, sphereRings);
     this.sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    
+    var planePoints = 15;
+    var planeMaterial = new THREE.MeshLambertMaterial({
+      color: 0x8a8a8a,
+      side: THREE.DoubleSide,
+      wireframe: true,
+      wireframeLinewidth: 1
+    });
+    var planeGeometry = new THREE.PlaneGeometry(500, 500, planePoints, planePoints);
+    this.plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    // var the renderer know we plan to update the vertices
+    this.plane.geometry.verticesNeedUpdate = true;
+    this.plane.geometry.dynamic = true;
+    // rotate and position plane on ground
+    this.plane.position.y = -200;
+    this.plane.rotation.x = -Math.PI/2;
 
     // add all objects to scene
     this.scene.add(ambientLight);
     this.scene.add(pointLight);
     this.scene.add(this.sphere);
+    this.scene.add(this.plane);
       
     //console.log("hello: ", this.isBeat, this.volume)
     //this.attributeChanged();
@@ -56,10 +83,9 @@ class VScene extends Polymer.Element {
 
   attributeChangedCallback() {
     super.attributeChangedCallback();
-    console.log("hello: ", this.isBeat, this.volume)
     // change sphere color every beat
     if (this.isBeat) {
-      let color = this.sphereColors[this.activeColor];
+      var color = this.sphereColors[this.activeColor];
       this.sphere.material.color = new THREE.Color(`rgb(${color.r},${color.g},${color.b})`);
       this.activeColor = this.activeColor < this.sphereColors.length - 1 ? this.activeColor + 1 : 0;
     }
@@ -68,6 +94,16 @@ class VScene extends Polymer.Element {
     this.sphere.scale.x = .3 + (this.volume / 2);
     this.sphere.scale.y = .3 + (this.volume / 2);
     this.sphere.scale.z = .3 + (this.volume / 2);
+    console.log("waveform: ", this.waveform);
+
+/*
+  waveform.forEach((value, i) => {
+    if (i%2 === 0) {
+      plane.geometry.vertices[i/2].z = value * 80;
+    }
+  });
+  plane.geometry.verticesNeedUpdate = true;
+*/
 
     // rerender scene every update
     this.renderer.render(this.scene, this.camera);

@@ -47,7 +47,7 @@
     }
     h1 {
       margin:2px 0 0 10px;
-      font-family: 'Inconsolata';
+      font-weight: bold;
     }
   </style>
   <div>
@@ -58,7 +58,7 @@
     </template>      
     <template is="dom-if" if="{{_isAnimation(t_domain)}}">
     
-      <v-scene is-beat="{{isBeat}}" volume="{{volume}}"></v-scene>
+      <v-scene is-beat="{{isBeat}}" volume="{{volume}}" waveform="{{waveform}}" levels="{{levels}}"></v-scene>
     </template>
     <h1>Live-input visualizer with Oscillator</h1>
     <div class="controlButton">

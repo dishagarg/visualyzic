@@ -1,6 +1,8 @@
 body, html {
   margin: 0;
   padding: 0;
+  color: #24292e; /**/
+  font-family: arial, sans-serif;
 }
 
 #about {
