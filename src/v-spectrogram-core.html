@@ -60,7 +60,6 @@
         <v-oscillator log={{log}} speed={{speed}}></v-oscillator>
       </template>      
       <template is="dom-if" if="{{_isAnimation(t_domain)}}">
-
         <v-scene is-beat="{{isBeat}}" volume="{{volume}}" waveform="{{waveform}}" levels="{{levels}}"></v-scene>
       </template>
       <h1>Live-input visualizer with Oscillator</h1>
@@ -83,7 +82,7 @@
       <template is="dom-if" if="{{songPlay}}">
         <v-audio-load load="{{log}}"></v-audio-load>
       </template>
-      <v-about-me></v-about-me>
+      <!--<v-about-me></v-about-me>-->
     </div>
   </template>
   <script src="../node_modules/lodash/lodash.js"></script>
