@@ -76,9 +76,6 @@ class VScene extends Polymer.Element {
     this.scene.add(pointLight);
     this.scene.add(this.sphere);
     this.scene.add(this.plane);
-      
-    //console.log("hello: ", this.isBeat, this.volume)
-    //this.attributeChanged();
   }
 
   attributeChangedCallback() {
