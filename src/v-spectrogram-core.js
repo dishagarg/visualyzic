@@ -424,5 +424,9 @@ class VSpectrogramCore extends Polymer.Element {
   _isAnimation(t_domain){
       return t_domain === 'animation';
   }
+  
+  _getClassAnimation(t_domain){
+      return t_domain === 'animation' ? 'animation' : '';
+  }
 }
 window.customElements.define(VSpectrogramCore.is, VSpectrogramCore);

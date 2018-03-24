@@ -34,6 +34,7 @@ class VScene extends Polymer.Element {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color( 0x204040 );
     this.renderer = new THREE.WebGLRenderer();
+    this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
     
     // initial camera position
     this.camera.position.z = 900;

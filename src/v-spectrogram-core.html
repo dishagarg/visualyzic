@@ -38,12 +38,12 @@
         left: 10px;
         bottom: 10px;
       }
-      .controlButton{
+      .controlButton {
         position: absolute;
         padding-top: 10px;
         margin-left: 10px;
       }
-      .playButton{
+      .playButton {
         position: relative;
         padding-top: 10px;
         margin-left: 270px;
@@ -51,6 +51,10 @@
       h1 {
         margin:2px 0 0 10px;
         font-weight: bold;
+      }
+      .animation {
+        color: black;
+        background-color: #90a0a0;
       }
     </style>
     <div>
@@ -64,10 +68,10 @@
       </template>
       <h1>Live-input visualizer with Oscillator</h1>
       <div class="controlButton">
-          <paper-button toggles raised class="green" on-click="_controlEvent">{{controlLabel}}</paper-button>
+          <paper-button toggles raised class="green" class$="{{_getClassAnimation(t_domain)}}" on-click="_controlEvent">{{controlLabel}}</paper-button>
       </div>
       <div class="playButton">
-          <paper-button toggles raised class="green" on-click="_songPlayEvent">{{songPlayLabel}}</paper-button>
+          <paper-button toggles raised class="green" class$="{{_getClassAnimation(t_domain)}}" on-click="_songPlayEvent">{{songPlayLabel}}</paper-button>
       </div>
       <template is="dom-if" if="{{controls}}">
         <v-spectrogram-controls
@@ -82,7 +86,7 @@
       <template is="dom-if" if="{{songPlay}}">
         <v-audio-load load="{{log}}"></v-audio-load>
       </template>
-      <!--<v-about-me></v-about-me>-->
+      <v-about-me></v-about-me>
     </div>
   </template>
   <script src="../node_modules/lodash/lodash.js"></script>
