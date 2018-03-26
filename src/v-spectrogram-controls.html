@@ -50,10 +50,18 @@
         <label for="log">Log scale</label>
         <paper-toggle-button id="log" checked="{{log}}"></paper-toggle-button>
     </div>
-    <div class="config">
-        <label for="color">Full color</label>
-        <paper-toggle-button id="color" checked="{{color}}"></paper-toggle-button>
-    </div>
+    <template is="dom-if" if="{{!_getOption(t_domain)}}">
+      <div class="config">
+          <label for="color">Full color</label>
+          <paper-toggle-button id="color" checked="{{color}}"></paper-toggle-button>
+      </div>
+    </template>
+    <template is="dom-if" if="{{_getOption(t_domain)}}">
+      <div class="config">
+          <label for="visual">Change visual setting</label>
+          <paper-toggle-button id="visual" checked="{{visual}}"></paper-toggle-button>
+      </div>
+    </template>
     <div class="config">
         <label for="speed">Speed</label>
         <paper-slider id="speed" value="{{speed}}" min="1" max="5"></paper-slider>

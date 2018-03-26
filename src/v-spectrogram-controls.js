@@ -29,6 +29,12 @@ class VSpectrogramControls extends Polymer.Element {
           reflectToAttribute: true,
           value: false,
       },
+      visual: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false,
+      },
       speed: {
           type: Number,
           notify: true,
@@ -46,6 +52,9 @@ class VSpectrogramControls extends Polymer.Element {
  constructor() {
     super();
     console.log('Created spectrogram controls');
+  }
+  _getOption(t_domain){
+    return (t_domain=='time') ? true : false;
   }
 }
 window.customElements.define(VSpectrogramControls.is, VSpectrogramControls);

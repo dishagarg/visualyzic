@@ -113,7 +113,6 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   render() {
-    console.log('Render');
     this.width = window.innerWidth;
     this.height = window.innerHeight;
 
@@ -155,18 +154,51 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   renderTimeDomain() {
-    console.log('renderTimeDomain');
     var times = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteTimeDomainData(times);
 
+    var WIDTH = this.width;
+    var HEIGHT = this.height;
     for (var i = 0; i < times.length; i++) {
       var value = times[i];
       var percent = value / 256;
       var barHeight = this.height * percent;
       var offset = this.height - barHeight - 1;
       var barWidth = this.width/times.length;
-      this.ctx.fillStyle = 'black';
-      this.ctx.fillRect(i * barWidth, offset, 1, 1);
+      if(this.visual){
+        this.ctx.fillStyle = 'rgb(200, 200, 200)';
+        this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeStyle = 'rgb(0, 0, 0)';
+
+        this.ctx.beginPath();
+
+        var sliceWidth = WIDTH * 1.0 / this.analyser.frequencyBinCount;
+        var x = 0;
+
+        for(var i = 0; i < this.analyser.frequencyBinCount; i++) {
+
+          var v = times[i] / 128.0;
+          var y = v * HEIGHT/2;
+
+          if(i === 0) {
+            this.ctx.moveTo(x, y);
+          } else {
+            this.ctx.lineTo(x, y);
+          }
+
+          x += sliceWidth;
+        }
+
+        this.ctx.lineTo(this.width, this.height/2);
+        this.ctx.stroke();
+      } else {
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillRect(i * barWidth, offset, 1, 1);
+        this.ctx.beginPath();
+
+      }
     }
   }
     
@@ -195,6 +227,48 @@ class VSpectrogramCore extends Polymer.Element {
     this.isBeat = this.getBeatTime();  // used to change the color of the ball on every beat
     //console.log('waveform: ', this.waveform);
     //console.log('isBeat: ', this.isBeat);
+  }
+
+  renderFreqDomain() {
+    var freq = new Uint8Array(this.analyser.frequencyBinCount);
+    this.analyser.getByteFrequencyData(freq);
+
+    var ctx = this.ctx;
+    // Copy the current canvas onto the temp canvas.
+    this.tempCanvas.width = this.width;
+    this.tempCanvas.height = this.height;
+    // console.log(this.$.canvas.height, this.tempCanvas.height);
+    var tempCtx = this.tempCanvas.getContext('2d');
+    tempCtx.drawImage(this.$.canvas, 0, 0, this.width, this.height);
+
+    // Iterate over the frequencies.
+    for (var i = 0; i < freq.length; i++) {
+      var value;
+      // Draw each pixel with the specific color.
+      if (this.log) {
+        var logIndex = this.logScale(i, freq.length);
+        value = freq[logIndex];
+      } else {
+        value = freq[i];
+      }
+      ctx.fillStyle = (this.color ? this.getFullColor(value) :
+                       this.getGrayColor(value));
+
+      var percent = i / freq.length;
+      var y = Math.round(percent * this.height);
+
+      // draw the line at the right side of the canvas
+      ctx.fillRect(this.width - this.speed, this.height - y,
+                   this.speed, this.speed);
+    }
+
+    // Translate the canvas. to have scrolling effect <--
+    ctx.translate(-this.speed, 0);
+    // Draw the copied image.
+    ctx.drawImage(this.tempCanvas, 0, 0, this.width, this.height,
+                  0, 0, this.width, this.height);
+    // Reset the transformation matrix.
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
   getBeatTime() {
@@ -241,49 +315,6 @@ class VSpectrogramCore extends Polymer.Element {
     return sum / this.levelsCount;
   }
     
-  renderFreqDomain() {
-    console.log('renderFreqDomain');
-    var freq = new Uint8Array(this.analyser.frequencyBinCount);
-    this.analyser.getByteFrequencyData(freq);
-
-    var ctx = this.ctx;
-    // Copy the current canvas onto the temp canvas.
-    this.tempCanvas.width = this.width;
-    this.tempCanvas.height = this.height;
-    // console.log(this.$.canvas.height, this.tempCanvas.height);
-    var tempCtx = this.tempCanvas.getContext('2d');
-    tempCtx.drawImage(this.$.canvas, 0, 0, this.width, this.height);
-
-    // Iterate over the frequencies.
-    for (var i = 0; i < freq.length; i++) {
-      var value;
-      // Draw each pixel with the specific color.
-      if (this.log) {
-        var logIndex = this.logScale(i, freq.length);
-        value = freq[logIndex];
-      } else {
-        value = freq[i];
-      }
-      ctx.fillStyle = (this.color ? this.getFullColor(value) :
-                       this.getGrayColor(value));
-
-      var percent = i / freq.length;
-      var y = Math.round(percent * this.height);
-
-      // draw the line at the right side of the canvas
-      ctx.fillRect(this.width - this.speed, this.height - y,
-                   this.speed, this.speed);
-    }
-
-    // Translate the canvas. to have scrolling effect <--
-    ctx.translate(-this.speed, 0);
-    // Draw the copied image.
-    ctx.drawImage(this.tempCanvas, 0, 0, this.width, this.height,
-                  0, 0, this.width, this.height);
-    // Reset the transformation matrix.
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-  }
-
   /**
    * Given an index and the total number of entries, return the
    * log-scaled value.
@@ -336,7 +367,6 @@ class VSpectrogramCore extends Polymer.Element {
       ctx.fillText(units, x + 10, y + yLabelOffset);
       // Draw a tick mark.
       ctx.fillRect(x + 40, y, 30, 2);
-        console.log('axes');
     }
   }
 
@@ -369,7 +399,6 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   onStream(stream) {
-    console.log('dhkf');
     var input = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
     analyser.smoothingTimeConstant = 0;
@@ -401,7 +430,6 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   _logChanged() {
-    console.log('loggggg');
     if (this.labels) {
       this.renderAxesLabels();
     }
