@@ -1,4 +1,4 @@
-/* eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
+/* eslint-disable */
 
 class VSpectrogramControls extends Polymer.Element {
   static get is() {return 'v-spectrogram-controls';}
@@ -41,7 +41,7 @@ class VSpectrogramControls extends Polymer.Element {
           reflectToAttribute: true,
           value: 2,
       },
-      t_domain: {
+      tDomain: {
           type: String,
           notify: true,
           reflectToAttribute: true,
@@ -49,12 +49,15 @@ class VSpectrogramControls extends Polymer.Element {
       },
     };
   }
- constructor() {
+  constructor() {
     super();
     console.log('Created spectrogram controls');
   }
-  _getOption(t_domain){
-    return (t_domain=='time') ? true : false;
+  _whichDomain(tDomain) {
+    return (tDomain=='time') ? true : false;
+  }
+  _getClassAnimation(tDomain) {
+      return tDomain === 'animation' ? 'animation' : '';
   }
 }
 window.customElements.define(VSpectrogramControls.is, VSpectrogramControls);

@@ -31,12 +31,15 @@
         font-size: 14px;
         margin-top: 0.5em;
       }
+      .animation {
+        display: none;
+      }
     </style>
     <h1>Spectrogram Controls</h1>
     <div class="config">
       <label for="domain">Select Domain:</label><br/>
         
-        <paper-radio-group selected="{{t_domain}}">
+        <paper-radio-group selected="{{tDomain}}">
           <!--<label for="time">time</label>-->
           <paper-radio-button id="time" name="time">Time</paper-radio-button>
           <!--<label for="freq">freq</label>-->
@@ -50,13 +53,13 @@
         <label for="log">Log scale</label>
         <paper-toggle-button id="log" checked="{{log}}"></paper-toggle-button>
     </div>
-    <template is="dom-if" if="{{!_getOption(t_domain)}}">
-      <div class="config">
+    <template is="dom-if" if="{{!_whichDomain(tDomain)}}">
+      <div class="config" class$="{{_getClassAnimation(tDomain)}}">
           <label for="color">Full color</label>
           <paper-toggle-button id="color" checked="{{color}}"></paper-toggle-button>
       </div>
     </template>
-    <template is="dom-if" if="{{_getOption(t_domain)}}">
+    <template is="dom-if" if="{{_whichDomain(tDomain)}}">
       <div class="config">
           <label for="visual">Change visual setting</label>
           <paper-toggle-button id="visual" checked="{{visual}}"></paper-toggle-button>

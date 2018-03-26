@@ -63,19 +63,19 @@
       <template is="dom-if" if="{{oscillator}}">
         <v-oscillator log={{log}} speed={{speed}}></v-oscillator>
       </template>      
-      <template is="dom-if" if="{{_isAnimation(t_domain)}}">
+      <template is="dom-if" if="{{_isAnimation(tDomain)}}">
         <v-scene is-beat="{{isBeat}}" volume="{{volume}}" waveform="{{waveform}}" levels="{{levels}}"></v-scene>
       </template>
       <h1>Live-input visualizer with Oscillator</h1>
       <div class="controlButton">
-          <paper-button toggles raised class="green" class$="{{_getClassAnimation(t_domain)}}" on-click="_controlEvent">{{controlLabel}}</paper-button>
+          <paper-button toggles raised class="green" class$="{{_getClassAnimation(tDomain)}}" on-click="_controlEvent">{{controlLabel}}</paper-button>
       </div>
       <div class="playButton">
-          <paper-button toggles raised class="green" class$="{{_getClassAnimation(t_domain)}}" on-click="_songPlayEvent">{{songPlayLabel}}</paper-button>
+          <paper-button toggles raised class="green" class$="{{_getClassAnimation(tDomain)}}" on-click="_songPlayEvent">{{songPlayLabel}}</paper-button>
       </div>
       <template is="dom-if" if="{{controls}}">
         <v-spectrogram-controls
-            t_domain="{{t_domain}}"
+            t-domain="{{tDomain}}"
             log="{{log}}"
             labels="{{labels}}"
             speed="{{speed}}"
