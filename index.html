@@ -34,20 +34,13 @@ Visualyzic: A live-input visualizer
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
     <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="bower_components/neon-animation/web-animations.html"></script>
 
     <!-- Load your application shell -->
     <link rel="import" href="src/v-spectrogram-core.html">
 
     <!-- Add any global styles for body, document, etc. -->
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
-        line-height: 1.5;
-        min-height: 100vh;
-        background-color: #eeeeee;
-      }
-    </style>
+    
   </head>
   <body>
     <script>
@@ -74,6 +67,9 @@ Visualyzic: A live-input visualizer
         ga('send', 'pageview');
     </script>
     <script src="spotify-web-api.js"></script>
+    <script src="//cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+    <script src="//cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+
     <v-spectrogram-core labels log oscillator></v-spectrogram-core>
 
     <noscript>

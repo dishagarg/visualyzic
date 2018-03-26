@@ -1,6 +1,13 @@
 /* eslint-disable */
 // Assumes context is an AudioContext defined outside of this class.
 
+var beatCutOff = 0;
+var beatTime = 0;
+var msecsAvg = 640;
+var bpmTime = 0;
+var ratedBPMTime = 550;
+var bpmStart = Date.now();
+
 class VSpectrogramCore extends Polymer.Element {
   static get is() {return 'v-spectrogram-core';}
 
@@ -106,7 +113,6 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   render() {
-    console.log('Render');
     this.width = window.innerWidth;
     this.height = window.innerHeight;
 
@@ -122,12 +128,14 @@ class VSpectrogramCore extends Polymer.Element {
       this.$.labels.height = this.height;
       didResize = true;
     }
-    console.log(this.t_domain);
+    //console.log(this.tDomain);
 
-    if (this.t_domain==='time') {
+    if (this.tDomain==='time') {
         this.renderTimeDomain();
     }
-      else {
+      else if (this.tDomain==='animation') {
+        this.renderAnimationScene();
+    } else {
         this.renderFreqDomain();
     }
 
@@ -146,23 +154,80 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   renderTimeDomain() {
-    console.log('renderTimeDomain');
     var times = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteTimeDomainData(times);
 
+    var WIDTH = this.width;
+    var HEIGHT = this.height;
     for (var i = 0; i < times.length; i++) {
       var value = times[i];
       var percent = value / 256;
       var barHeight = this.height * percent;
       var offset = this.height - barHeight - 1;
       var barWidth = this.width/times.length;
-      this.ctx.fillStyle = 'black';
-      this.ctx.fillRect(i * barWidth, offset, 1, 1);
+      if(this.visual){
+        this.ctx.fillStyle = 'rgb(200, 200, 200)';
+        this.ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeStyle = 'rgb(0, 0, 0)';
+
+        this.ctx.beginPath();
+
+        var sliceWidth = WIDTH * 1.0 / this.analyser.frequencyBinCount;
+        var x = 0;
+
+        for(var i = 0; i < this.analyser.frequencyBinCount; i++) {
+
+          var v = times[i] / 128.0;
+          var y = v * HEIGHT/2;
+
+          if(i === 0) {
+            this.ctx.moveTo(x, y);
+          } else {
+            this.ctx.lineTo(x, y);
+          }
+          x += sliceWidth;
+        }
+
+        this.ctx.lineTo(this.width, this.height/2);
+        this.ctx.stroke();
+      } else {
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillRect(i * barWidth, offset, 1, 1);
+        this.ctx.beginPath();
+      }
     }
+  }
+    
+  renderAnimationScene() {
+    //console.log('renderAnimationScene');
+    
+    // init options
+    this.volSens = this.volSens || 1;
+    this.beatHoldTime = this.beatHoldTime || 45;
+    this.beatDecayRate = this.beatDecayRate || .9;
+    this.beatMin = this.beatMin || .2;
+    this.levelsCount = this.levelsCount || 16;
+      
+    this.freqArray = new Uint8Array(this.analyser.frequencyBinCount);
+    this.timeArray = new Uint8Array(this.analyser.frequencyBinCount);
+    this.dataArray = new Float32Array(this.analyser.fftSize);
+    this.analyser.getByteFrequencyData(this.freqArray);
+    this.analyser.getByteTimeDomainData(this.timeArray);
+    this.analyser.getFloatTimeDomainData(this.dataArray);
+    this.bufferLength = this.analyser.frequencyBinCount;
+      
+    
+    this.waveform = this.getNormalizedWaveform();  // used for the plane geometry in scene
+    this.levels = this.getNormalizedLevels();   // used for nothing but volume
+    this.volume = this.getAverageVolumeLevel();   // used for the ball in scene
+    this.isBeat = this.getBeatTime();  // used to change the color of the ball on every beat
+    //console.log('waveform: ', this.waveform);
+    //console.log('isBeat: ', this.isBeat);
   }
 
   renderFreqDomain() {
-    console.log('renderFreqDomain');
     var freq = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteFrequencyData(freq);
 
@@ -204,6 +269,50 @@ class VSpectrogramCore extends Polymer.Element {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
+  getBeatTime() {
+    if (this.volume > beatCutOff && this.volume > this.beatMin) {
+      beatCutOff = this.volume * 1.1;
+      beatTime = 0;
+    } else {
+      if (beatTime <= this.beatHoldTime) {
+        beatTime++;
+      } else {
+        beatCutOff *= this.beatDecayRate;
+        beatCutOff = Math.max(beatCutOff, this.beatMin);
+      }
+    }
+
+    bpmTime = (Date.now() - bpmStart) / msecsAvg;
+
+    return beatTime < 6;
+  }
+
+  getNormalizedWaveform() {
+    return _.times(this.bufferLength, function(i){
+      return ((this.timeArray[i] - 128) / 128) * this.volSens;
+    }.bind(this));
+  }
+
+  getNormalizedLevels() {
+    var bufferLength = this.bufferLength;   // frquencyBinCount = 128
+    var levelBins = Math.floor(bufferLength / this.levelsCount);  // levelsCount = 16
+    return _.times(this.levelsCount, (function(i){
+      var sum = 0;
+      _.times(levelBins, (function(j){
+        sum += this.freqArray[(i * levelBins) + j];
+      }).bind(this));
+      return sum / levelBins / 256 * this.volSens;
+    }).bind(this));
+  }
+
+  getAverageVolumeLevel() {
+    var sum = 0;
+    _.times(this.levelsCount, (function(i){
+      sum += this.levels[i];
+    }).bind(this));
+    return sum / this.levelsCount;
+  }
+    
   /**
    * Given an index and the total number of entries, return the
    * log-scaled value.
@@ -256,7 +365,6 @@ class VSpectrogramCore extends Polymer.Element {
       ctx.fillText(units, x + 10, y + yLabelOffset);
       // Draw a tick mark.
       ctx.fillRect(x + 40, y, 30, 2);
-        console.log('axes');
     }
   }
 
@@ -289,7 +397,6 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   onStream(stream) {
-    console.log('dhkf');
     var input = context.createMediaStreamSource(stream);
     var analyser = context.createAnalyser();
     analyser.smoothingTimeConstant = 0;
@@ -321,7 +428,6 @@ class VSpectrogramCore extends Polymer.Element {
   }
 
   _logChanged() {
-    console.log('loggggg');
     if (this.labels) {
       this.renderAxesLabels();
     }
@@ -339,6 +445,14 @@ class VSpectrogramCore extends Polymer.Element {
     } else {
       this.clearAxesLabels();
     }
+  }
+    
+  _isAnimation(tDomain) {
+      return tDomain === 'animation';
+  }
+  
+  _getClassAnimation(tDomain) {
+      return tDomain === 'animation' ? 'animation' : '';
   }
 }
 window.customElements.define(VSpectrogramCore.is, VSpectrogramCore);

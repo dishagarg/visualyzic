@@ -3,25 +3,18 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
-
-<dom-module id="v-oscillator">
+<dom-module id="v-scene">
   <template>
   <style>
-    #freq {
+    #scene {
       position: absolute;
       width: 100%;
       height: 100%;
     }
   </style>
-  <canvas id="freq" 
-      on-mousedown="onMouseDown"
-      on-mouseup="onMouseUp"
-      on-mousemove="onMouseMove"
-      on-mouseout="onMouseOut"
-      on-touchstart="onTouchStart"
-      on-touchend="onTouchEnd"
-      on-touchmove="onTouchMove"></canvas>
-  </template>
+
   
-  <script src="v-oscillator.js"></script>
+  <div id="scene"></div>
+  </template>
+  <script src="v-scene.js"></script>
 </dom-module>

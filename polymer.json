@@ -4,7 +4,9 @@
   "fragments": [
     "src/v-spectrogram-controls.html",
     "src/v-oscillator.html",
-    "src/v-audio-load.html"
+    "src/v-audio-load.html",
+    "src/v-about-me.html",
+    "src/v-scene.html"
   ],
   "sources": [
     "src/**/*",

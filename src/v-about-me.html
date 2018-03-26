@@ -1,0 +1,58 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+
+
+<dom-module id="v-about-me">
+  <template>
+    <style>
+      :host {
+        display: block;
+        z-index: 10;
+        }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+        margin-bottom: 20px;
+      }
+      .config {
+        font-size: 14px;
+        margin-top: 0.5em;
+      }
+    </style>
+    <paper-button raised on-click="_open">About this Project</paper-button>
+    <paper-dialog id="dialog">
+        <h2>Live-input visualizer with Oscillator</h2>
+        <p>This is a web-application to visualize the live-input audio.</p>
+        <p>Check out the code <a href="https://github.com/dishagarg/visualyzic">here</a></p>
+      </paper-dialog>
+    </template>
+  <script>
+    /* eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
+
+    class VAboutMe extends Polymer.Element {
+      static get is() {return 'v-about-me';}
+      static get properties() {
+        return {
+          dialog: {
+            type: Boolean,
+            value: false,
+          },
+        };
+      }
+
+     constructor() {
+        super();
+        console.log('Created VAboutMe');
+      }
+      ready() {
+        super.ready();
+      }
+      _open() {
+        this.$.dialog.open();
+      }
+    }
+    window.customElements.define(VAboutMe.is, VAboutMe);
+
+  </script>
+</dom-module>
